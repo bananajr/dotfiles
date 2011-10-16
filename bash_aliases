@@ -8,6 +8,3 @@ elif [ $OS == linux ]; then
 fi
 
 alias thumbdis='objdump -S -M reg-names-std --disassembler-options=force-thumb -d \!:*';
-
-alias friendly="ssh jakes@friendly.synapse.com"
-alias arda="ssh swingnut@arda.pair.com"

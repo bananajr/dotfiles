@@ -1,0 +1,10 @@
+Host pair.com pair
+     HostName arda.pair.com
+     User swingnut
+     IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
+
+Host friendly
+     HostName friendly.synapse.com
+
+Host *.synapse.com
+     IdentityFile ~/.ssh/sprouse
