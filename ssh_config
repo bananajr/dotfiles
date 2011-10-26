@@ -7,7 +7,7 @@ Host friendly
      HostName friendly.synapse.com
 
 Host *.synapse.com
-     IdentityFile ~/.ssh/sprouse
+     IdentityFile ~/.ssh/sprouse@synapse.com_rsa
 
 Host github.com
      User bananajr
