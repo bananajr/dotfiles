@@ -8,3 +8,7 @@ Host friendly
 
 Host *.synapse.com
      IdentityFile ~/.ssh/sprouse
+
+Host github.com
+     User bananajr
+     IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
