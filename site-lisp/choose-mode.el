@@ -3,7 +3,7 @@
 ;;;======================================================================
 ;;; utility functions
 ;;;======================================================================
-(defun file-name-with-new-extension (file ext)
+(defun filename-with-new-extension (file ext)
   (unless (char-equal (aref ext 0) ?.)
     (setq ext (concat "." ext)))
   (concat (file-name-sans-extension file) ext))
@@ -33,6 +33,11 @@
 (defun other-files-in-buffer-dir-with-ext-p (ext)
   (let ((bufdir (file-name-directory (buffer-file-name))))
     (> (num-files-in-dir-with-ext bufdir ext) 0)))
+
+(defun choose-mode (mode)
+  ;(message "choosing %s" (prin1-to-string mode))
+  (apply mode ())
+  t)
 
 
 ;;;======================================================================
@@ -65,55 +70,66 @@
 ;;; .m: distinguish between objective-c and matlab files
 ;;;======================================================================
 
-(defun matlab-ish-buffer-p ()
+(defun matlab-ish-mbuffer-p ()
+  ;(message "checking for matlab-ish .m buffer")
   (or (buffer-contains-regexp "^[ \t]*function[ \t]")
       (buffer-contains-regexp "^[ \t]*%")))
 
-(defun objc-ish-buffer-p ()
-  (buffer-contains-regexp "@implementation"))
+(defun objc-implementation-ish-mbuffer-p ()
+  (or (buffer-contains-regexp "@implementation")
+      (buffer-contains-regexp "@import")
+      (buffer-contains-regexp "@NSString")))
 
-(defun matlab-mode-if-available-or-objc ()
+(defun matlab-mode-if-available ()
   (if (functionp 'matlab-mode)
-      (matlab-mode)
-    (message "file appears to be matlab code but matlab-mode is not available")
-    (objc-mode)))
+      (choose-mode 'matlab-mode)
+    ;(message "matlab-mode is unavailable")
+    nil))
 
-(defun m-delta-from-mbuffer ()
-  (cond ((objc-ish-buffer-p) 1)
-        ((matlab-ish-buffer-p)  -1)))
+(defun matlab-ish-mbuffer-check ()
+  ;(message "checking for matlab-ish .m file")
+  (if (not (matlab-ish-mbuffer-p)) nil
+    (message "matlab-ish buffer detected");
+    (matlab-mode-if-available)))
 
-(defun m-delta-from-hbuffer () 1)
-(defun m-delta-from-cbuffer () -1)
+(defun objc-implementation-ish-mbuffer-check ()
+  ;(message "checking for objc-ish .m file")
+  (if (not (objc-implementation-ish-mbuffer-p)) nil
+    (message "objc-ish buffer detected")
+    (choose-mode 'objc-mode)))
 
-(defun matlab-or-objc-from-count (count)
-  (cond ((not count) nil)
-        ((< count 0) (matlab-mode-if-available-or-objc) t)
-        ((> count 0) (objc-mode) t)
-        (t nil)))
+(defun objc-corresponding-hfile-check ()
+  ;(message "checking for objc-ish corresponding .h file")
+  (if (not (file-exists-p (filename-with-new-extension (buffer-file-name) ".h")))
+      nil
+    (message "corresponding .h file detected")
+    (choose-mode 'objc-mode)))
 
-(defun matlab-or-objc-from-corresponding-hfile (file)
-  (matlab-or-objc-from-count (visit-file-for-fn file 'm-delta-from-hbuffer)))
-
-(defun matlab-or-objc-from-mbuffer()
-  (matlab-or-objc-from-count (m-delta-from-mbuffer)))
-
-(defun matlab-or-objc-from-other-files ()
-  (message "checking other files")
-  (let ((bufdir (file-name-directory (buffer-file-name)))
-        (count 0) ; positive for objc, negative for matlab
-        (matlab-or-objc-ext-delta-map
-         '(("h" . m-delta-from-hbuffer)
-           ("m" . m-delta-from-mbuffer)
-           ("c" . m-delta-from-cbuffer)))
-    (dolist (file (directory-files dir) count)
-      (dolist (map matlab-or-objc-ext-delta-map count)
-        (when (equal (file-name-extension file) (car map))
-          (setq count (+ (visit-file-for-fn file (cdr map)) count)))))
-    (matlab-or-objc-from-count count))))
+(defun apply-objc-matlab-last-mode ()
+  (if 'objc-matlab-last-mode
+      (progn
+        (message "applying last mode (%s)"
+                 (prin1-to-string objc-matlab-last-mode))
+        (apply objc-matlab-last-mode ()))
+    (message "choose-mode-for-dot-m: no objc-matlab-last-mode to apply")))
 
 (defun choose-mode-for-dot-m ()
-  (cond ((matlab-or-objc-from-corresponding-hfile 
-          (file-name-with-new-extension (buffer-file-name) ".h")) t)
-        ((matlab-or-objc-from-mbuffer) t)
-        ((matlab-or-objc-from-other-files) t)
-        (t (objc-mode) t)))
+  (or
+   ; check for mode-specific keywords
+   (matlab-ish-mbuffer-check)
+   (objc-implementation-ish-mbuffer-check)
+   ; if the corresponding header file is empty, assume objc
+   (objc-corresponding-hfile-check)
+   ; run the most recently used mode
+   (apply-objc-matlab-last-mode)))
+
+(defun choose-mode-matlab-mode-hook ()
+  ;(message "objc-matlab-last-mode = matlab-mode")
+  (setq objc-matlab-last-mode 'matlab-mode))
+(add-hook 'matlab-mode-hook 'choose-mode-matlab-mode-hook)
+
+(defun choose-mode-objc-mode-hook ()
+  ;(message "objc-matlab-last-mode = objc-mode")
+  (setq objc-matlab-last-mode 'objc-mode))
+(add-hook 'objc-mode-hook 'choose-mode-objc-mode-hook);
+
