@@ -8,3 +8,6 @@
 if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
+
+LS_COLORS="di=34:ln=37:ex=31"
+export LS_COLORS
