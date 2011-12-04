@@ -1,0 +1,12 @@
+# note: directories MUST end in '/'
+
+# bash stuff
+bashrc               ~/.bashrc
+bash_profile         ~/.bash_profile
+bash_aliases         ~/.bash_aliases
+
+    # emacs stuff
+emacs.d              ~/.emacs.d
+viper                ~/.viper #can this be moved?
+
+ssh/                 ~/.ssh/   # ssh
