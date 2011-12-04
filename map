@@ -5,8 +5,9 @@ bashrc               ~/.bashrc
 bash_profile         ~/.bash_profile
 bash_aliases         ~/.bash_aliases
 
-    # emacs stuff
-emacs.d              ~/.emacs.d
+# emacs stuff
+emacs.d/             ~/.emacs.d/
 viper                ~/.viper #can this be moved?
 
-ssh/                 ~/.ssh/   # ssh
+# ssh stuff
+ssh/config           ~/.ssh/config
