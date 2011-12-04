@@ -76,7 +76,7 @@
 ;;;======================================================================
 ;;; path for extra functions
 ;;;======================================================================
-(setq load-path (append load-path (list "~/site-lisp")))
+(setq load-path (append load-path (list "~/.emacs.d/lisp")))
 
 
 (set-foreground-color "black")
