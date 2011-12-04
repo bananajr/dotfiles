@@ -154,28 +154,6 @@
 
 
 
-;;;======================================================================
-;;; never leave tabs in files
-;;;======================================================================
-(defun untabify-and-clean ()
-  ;; restore point and mark when done
-  (save-excursion
-    ;; first, delete whitespace at the end of lines
-    (goto-char (point-min))
-    (while (re-search-forward "[ \t]+$" nil t)
-      (delete-region (match-beginning 0) (match-end 0)))
-    ;; if any tabs left, untabify the buffer
-    (if (search-forward "\t" nil t)
-		(untabify (point-min) (point-max))))
-  ;; return nil for write-contents-hooks
-  nil)
-
-(defun untabify-write-contents-hook ()
-  (make-local-variable 'write-contents-hooks)
-  (add-hook 'write-contents-hooks 'untabify-and-clean))
-
-
-
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -198,6 +176,7 @@
 ;;; matlab
 ;;;======================================================================
 (defun my-matlab-mode-hook ()
+  (setq show-trailing-whitespace t)
   (setq fill-column (- (frame-width) 2)))
 (if (or (featurep 'matlab) (load "matlab" t))
     (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
@@ -210,17 +189,20 @@
 ;;;======================================================================
 ;;; c
 ;;;======================================================================
-(add-hook 'c-mode-common-hook 'untabify-write-contents-hook)
+(defun my-c-mode-hook ()
+  (setq show-trailing-whitespace t))
+(add-hook 'c-mode-common-hook 'my-c-mode-hook)
 ;(add-hook 'c-mode-common-hook (lambda () (column-marker-1 79)))
 (setq-default indent-tabs-mode nil)
 
 ;;;======================================================================
 ;;; objective-c
 ;;;======================================================================
-(add-hook 'objc-mode-hook
-	  '(lambda ()
-	     (c-set-offset 'objc-method-args-cont 'c-lineup-ObjC-method-args)
-	     (c-set-offset 'objc-method-call-cont 'c-lineup-ObjC-method-call)))
+(defun my-objc-mode-hook ()
+  (setq show-trailing-whitespace t)
+  (c-set-offset 'objc-method-args-cont 'c-lineup-ObjC-method-args)
+  (c-set-offset 'objc-method-call-cont 'c-lineup-ObjC-method-call))
+(add-hook 'objc-mode-hook 'my-objc-mode-hook);
 
 
 
@@ -283,7 +265,7 @@
 (set-face-attribute 'font-lock-type-face nil :foreground "unspecified")
 (set-face-attribute 'font-lock-function-name-face nil :foreground "unspecified")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "unspecified")
-
+(set-face-attribute 'trailing-whitespace nil :background "#ffd0d0")
 
 ;;;======================================================================
 ;;; set the current frame size
@@ -298,11 +280,5 @@
   (interactive "nHeight: ")
   (set-frame-height (selected-frame) h))
 (global-set-key (kbd "C-x h") 'set-current-frame-height)
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
 
 (put 'narrow-to-region 'disabled nil)
