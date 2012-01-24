@@ -4,7 +4,16 @@ Host pair.com pair
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
 
 Host friendly
+     User sprouse
      HostName friendly.synapse.com
+
+Host friendlier
+     User sprouse
+     HostName friendlier.synapse.com
+
+Host git
+     User jake
+     HostName git.synapse.com
 
 Host *.synapse.com
      IdentityFile ~/.ssh/sprouse@synapse.com_rsa
@@ -12,3 +21,8 @@ Host *.synapse.com
 Host github.com
      User bananajr
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
+
+Host dreamhost
+     User obviousgap
+     IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
+     HostName rogue.dreamhost.com
