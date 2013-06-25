@@ -26,3 +26,9 @@ Host dreamhost
      User obviousgap
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
      HostName rogue.dreamhost.com
+
+Host home
+     User root
+     IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
+     HostName home.jakesprouse.net
+     Port 9720

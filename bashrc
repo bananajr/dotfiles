@@ -85,17 +85,20 @@ function conspath() {
     for d in $@; do
         if [ -d $d ]; then
             export PATH="$1:$PATH"
+#	else
+#	    echo '"' $d '" is not a directory'
         fi
     done
 }
 
-# for python 2.7 on osx
-conspath "/Library/Frameworks/Python.framework/Versions/2.7/bin"
-
-conspath /opt/bin /opt/local/bin /opt/local/sbin
+# gcc arm cross-compiler
+conspath "$HOME/arm-cs-tools/bin"
 
 # yes, I want to use the big guns
 conspath /sbin /usr/sbin /usr/local/sbin
+
+# my stuff
+conspath "$HOME/bin"
 
 
 
