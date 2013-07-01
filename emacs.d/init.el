@@ -51,6 +51,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'nil)
   (global-set-key "\C-x\M-v" 'clipboard-yank)
+  (server-start)
   (setq path-separator "/"))
 
 ;;; init stuff specifically if we're running on x11
@@ -62,6 +63,7 @@
   (gui-init)
   (cond ((equal window-system 'w32) (w32-init))
 		((equal window-system 'mac) (mac-init))
+		((equal window-system 'ns) (mac-init))
 		(t (x11-init))))
 
 
