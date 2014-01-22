@@ -91,9 +91,6 @@ function conspath() {
     done
 }
 
-# gcc arm cross-compiler
-conspath "$HOME/arm-cs-tools/bin"
-
 # yes, I want to use the big guns
 conspath /sbin /usr/sbin /usr/local/sbin
 

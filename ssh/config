@@ -22,9 +22,11 @@ Host github.com
      User bananajr
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
 
-Host dreamhost
-     User obviousgap
+Host rogue.dreamhost.com
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
+
+Host dreamhost
+     User bananajr
      HostName rogue.dreamhost.com
 
 Host home
