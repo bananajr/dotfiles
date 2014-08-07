@@ -189,6 +189,26 @@
 
 
 ;;;======================================================================
+;;; markdown
+;;;======================================================================
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;;;======================================================================
+;;; asciidoc
+;;;======================================================================
+(autoload 'doc-mode "doc-mode"
+  "Major mode for editing asciidoc files" t)
+(add-to-list 'auto-mode-alist '("\\.adoc\\'" . doc-mode))
+(add-hook 'doc-mode-hook
+          '(lambda ()
+             (turn-on-auto-fill)
+             (require 'asciidoc)))
+
+
+;;;======================================================================
 ;;; c
 ;;;======================================================================
 (defun my-c-mode-hook ()

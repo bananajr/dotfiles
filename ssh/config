@@ -22,15 +22,25 @@ Host github.com
      User bananajr
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
 
-Host rogue.dreamhost.com
+Host github-synapse
+     User jakesprouse
+     HostName github.com
+     IdentityFile ~/.ssh/sprouse@synapse.com_rsa
+
+Host thrain.dreamhost.com
+     User bananajr
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
 
 Host dreamhost
      User bananajr
-     HostName rogue.dreamhost.com
+     HostName thrain.dreamhost.com
 
 Host home
      User root
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
      HostName home.jakesprouse.net
      Port 9720
+
+Host bitbucket_quanttus
+     IdentityFile ~/.ssh/sprouse@synapse.com_rsa
+     HostName bitbucket.org
