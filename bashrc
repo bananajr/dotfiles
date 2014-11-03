@@ -1,15 +1,3 @@
-case `uname -s` in
-	Darwin)
-		OS=osx
-		;;
-	Linux)
-		OS=linux
-		;;
-	*)
-		OS=unknown
-		;;
-esac
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
@@ -98,6 +86,22 @@ conspath /opt/bin /opt/local/bin /opt/local/sbin
 conspath /sbin /usr/sbin /usr/local/sbin
 
 
+## --- SSH-AGENT -------------------------------------------------------------
+# ----------------------------------------------------------------------------
+SSH_ENV=$HOME/.ssh/environment
+function start_agent {
+	/usr/bin/ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}
+	echo "SSH Agent activated."
+	chmod 600 ${SSH_ENV}
+	. ${SSH_ENV} > /dev/null
+}
+if [ -f "${SSH_ENV}" ]; then
+	. ${SSH_ENV} > /dev/null
+	ps -ef ${SSH_AGENT_PID} | grep ssh-agent$ >/dev/null || start_agent
+else
+	start_agent
+fi
+	
 
 # --- MACHINE LOCAL ----------------------------------------------------------
 # ----------------------------------------------------------------------------
@@ -107,4 +111,11 @@ if [ -r ~/.bashrc_local ]; then
 fi 
 
 
-defaults write ~/.MacOSX/environment PATH "$PATH"
+# --- OS LOCAL ---------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+if [ ${OSTYPE} = "cygwin" ]; then
+   if [ -r ~/.bashrc_cygwin ]; then . ~/.bashrc_cygwin; fi
+elif [ ${OSTYPE:0:6} = "darwin" ]; then
+   if [ -r ~/.bashrc_darwin ]; then . ~/.bashrc_darwin; fi
+fi
