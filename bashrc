@@ -1,3 +1,15 @@
+case `uname -s` in
+        Darwin)
+                OS=osx
+                ;;
+        Linux)
+                OS=linux
+                ;;
+        *)
+                OS=unknown
+                ;;
+esac
+
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
@@ -70,21 +82,31 @@ export VISUAL=vi
 # ----------------------------------------------------------------------------
 
 function conspath() {
-    for d in $@; do
-        if [ -d $d ]; then
+    q=0; if [ "$1" == "-q" ]; then shift; q=1; fi
+    for d in "$@"; do
+        if [ -d "$d" ]; then
             export PATH="$1:$PATH"
+	elif [ $q -eq 0 ]; then
+	    echo 'conspath: "' $d '" is not a directory'
         fi
     done
 }
 
-# for python 2.7 on osx
-conspath "/Library/Frameworks/Python.framework/Versions/2.7/bin"
-
-conspath /opt/bin /opt/local/bin /opt/local/sbin
-
 # yes, I want to use the big guns
-conspath /sbin /usr/sbin /usr/local/sbin
+conspath -q /sbin /usr/sbin /usr/local/sbin
 
+# my stuff
+conspath -q "$HOME/bin"
+
+if [ $OS == "osx" ]; then
+
+	# Racket
+	racketdir=`ls -d /Applications/Racket* 2>/dev/null | tail -n 1`
+	if [ "$racketdir" != "" ]; then conspath "$racketdir/bin"; fi
+
+	# not sure why I do this
+	defaults write ~/.MacOSX/environment PATH "$PATH"
+fi
 
 ## --- SSH-AGENT -------------------------------------------------------------
 # ----------------------------------------------------------------------------

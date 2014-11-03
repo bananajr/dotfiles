@@ -51,6 +51,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'nil)
   (global-set-key "\C-x\M-v" 'clipboard-yank)
+  (server-start)
   (setq path-separator "/"))
 
 ;;; init stuff specifically if we're running on x11
@@ -62,6 +63,7 @@
   (gui-init)
   (cond ((equal window-system 'w32) (w32-init))
 		((equal window-system 'mac) (mac-init))
+		((equal window-system 'ns) (mac-init))
 		(t (x11-init))))
 
 
@@ -184,6 +186,26 @@
 ;; we now handle .m files with choose-mode-for-dot-m
 ;;(setq auto-mode-alist (cons '("\\.m" . matlab-mode) auto-mode-alist))
 
+
+
+;;;======================================================================
+;;; markdown
+;;;======================================================================
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;;;======================================================================
+;;; asciidoc
+;;;======================================================================
+(autoload 'doc-mode "doc-mode"
+  "Major mode for editing asciidoc files" t)
+(add-to-list 'auto-mode-alist '("\\.adoc\\'" . doc-mode))
+(add-hook 'doc-mode-hook
+          '(lambda ()
+             (turn-on-auto-fill)
+             (require 'asciidoc)))
 
 
 ;;;======================================================================
