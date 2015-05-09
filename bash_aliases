@@ -26,4 +26,12 @@ alias ht='todo ls @home'
 alias ct='todo ls @computer'
 
 # recursive grep
-rgrep () { find . -type f -name "$2" -print0 | xargs -0 grep "$1" ; }
+rgrep () {
+      (
+        if [ $# -gt 2 ]; then
+          cd $1
+          shift
+        fi
+        find . -type f -name "$2" -print0 | xargs -0 grep "$1"
+      )
+}
