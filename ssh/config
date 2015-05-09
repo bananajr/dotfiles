@@ -27,13 +27,13 @@ Host github-synapse
      HostName github.com
      IdentityFile ~/.ssh/sprouse@synapse.com_rsa
 
-Host thrain.dreamhost.com
+Host chesterfield.dreamhost.com
      User bananajr
      IdentityFile ~/.ssh/jake@jakesprouse.net_rsa
 
 Host dreamhost
      User bananajr
-     HostName thrain.dreamhost.com
+     HostName chesterfield.dreamhost.com
 
 Host home
      User root
