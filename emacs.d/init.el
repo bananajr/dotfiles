@@ -67,6 +67,8 @@
 		(t (x11-init))))
 
 
+(setq switch-to-buffer-preserve-window-point t)
+
 
 ;;;======================================================================
 ;;; default to $HOME
@@ -298,3 +300,32 @@
 (global-set-key (kbd "C-x h") 'set-current-frame-height)
 
 (put 'narrow-to-region 'disabled nil)
+
+
+
+;;;======================================================================
+;;; code text stuff
+;;;======================================================================
+(setq case-fold-search nil)
+
+(defun uncamelcase-region (beg end)
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region beg end)
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward-regexp "\\([A-Z]\\)" nil t)
+        (replace-match
+         (concat "_" (downcase (match-string 1))) t t)))))
+  
+(defun camelcase-word-at-point ()
+  "Camelcase the word at point, replacing underscores and
+   the character following it with the uppercase of that
+   character."
+  (interactive)
+  (save-excursion
+    (let ((bounds (bounds-of-thing-at-point 'word)))
+      (upcase-initials-region start end)
+      (replace-string "_" "" nil start end)
+      (downcase-region start (1+ start)))))
+ 

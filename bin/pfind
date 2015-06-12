@@ -1,0 +1,65 @@
+#!/bin/bash
+
+
+# list of "key files."  For the find_files_keyfile function, a top level project director
+# is one where a key file exists in the current directory but not in the parent directory
+KEYFILE_NAMES=Makefile
+
+
+PROGNAME=`basename $0`
+LEVELS=10
+
+
+function find_vcs_root {
+	path=$1
+	if [[ -d "$path/.git" ]]; then return 0; fi
+	return 1
+}
+
+
+
+function find_keyfile {
+	path=$1
+	for name in $KEYFILE_NAMES; do
+		if [[ -r "$path/$name" && ! -r "$path/../$name" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+
+
+function find_files {
+	path=$1
+	find_vcs_root $path  && return 0
+	find_keyfile  $path  && return 0
+	return 1
+}
+
+
+
+function usage {
+	msg=$(cat <<EOF
+usage: $PROGNAME [<find_opts>] [<find_expression>]
+EOF
+)
+	if [ $1 == 0 ]; then echo "$msg"; else echo "$msg" >&2; fi
+	exit $1
+} 
+
+
+level=0
+path=.
+while [[ $level -lt $LEVELS ]]; do
+	find_files $path && break
+	let level=level+1
+	path="$path/.."
+done
+
+if [[ $level -eq $LEVELS ]]; then
+	echo "error: no top-level project directory found"
+	exit 1
+fi
+
+find "$path" "$@"

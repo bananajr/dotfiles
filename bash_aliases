@@ -28,10 +28,21 @@ alias ct='todo ls @computer'
 # recursive grep
 rgrep () {
       (
+        if [[ $# -eq 0 || $1 == "--help" ]]; then
+		echo "usage: rgrep [<DIR>] <REGEXP> <FILENAME_PATTERN>"
+	fi
         if [ $# -gt 2 ]; then
-          cd $1
+          cd $1      
           shift
         fi
-        find . -type f -name "$2" -print0 | xargs -0 grep "$1"
+        find . -type f -name "$2" -print0 | xargs -0 grep -n "$1"
       )
+}
+
+# recursive grep in project
+prgrep () {
+        if [[ $# -eq 0 || $1 == "--help" ]]; then
+		echo "usage: prgrep <REGEXP> <FILENAME_PATTERN>"
+	fi
+	pfind -type f -name "$2" -print0 | xargs -0 grep -n "$1"
 }

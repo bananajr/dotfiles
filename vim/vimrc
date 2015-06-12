@@ -1,0 +1,16 @@
+set nocompatible
+filetype off
+
+set splitbelow
+set splitright
+
+set hidden
+set autochdir
+
+set rtp+=~/.vim/bundle/Vundle.vim   " Vundle runtime path
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+call vundle#end()
+
+filetype plugin indent on
+

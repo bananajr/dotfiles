@@ -9,5 +9,12 @@ bash_aliases         ~/.bash_aliases
 emacs.d/             ~/.emacs.d/
 viper                ~/.viper #can this be moved?
 
+# vim stuff
+vim/vimrc            ~/.vim/vimrc
+vim/gvimrc           ~/.vim/gvimrc
+
 # ssh stuff
 ssh/config           ~/.ssh/config
+
+# scripts & utilities
+bin/pfind            ~/bin/pfind
