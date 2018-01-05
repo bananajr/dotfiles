@@ -1,3 +1,6 @@
+Host *
+     AddKeysToAgent yes
+
 Host pair.com pair
      HostName arda.pair.com
      User swingnut
