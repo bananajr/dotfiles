@@ -6,15 +6,14 @@ bash_profile         ~/.bash_profile
 bash_aliases         ~/.bash_aliases
 
 # emacs stuff
-emacs.d/             ~/.emacs.d/
-viper                ~/.viper #can this be moved?
+emacs.d              ~/.emacs.d
+viper                ~/.viper     #can this be moved?
 
 # vim stuff
-vim/vimrc            ~/.vim/vimrc
-vim/gvimrc           ~/.vim/gvimrc
+vim                  ~/.vim
 
 # ssh stuff
-ssh/config           ~/.ssh/config
+ssh                  ~/.ssh
 
 # scripts & utilities
-bin/pfind            ~/bin/pfind
+bin                  ~/bin
